@@ -78,11 +78,11 @@ class options:
 
     status_values = ['Won', 'Lost', 'Draft', 'To be approved', 'Not lost for AM',
                     'Wonderful', 'Revised', 'Offered', 'Offerable']
-    status_dict = {'Lost':0, 'Won':1, 'Draft':2, 'To be approved':3, 'Not lost for AM':4,
-                'Wonderful':5, 'Revised':6, 'Offered':7, 'Offerable':8}
+    status_dict = {'Won': 1, 'Draft': 7, 'To be approved': 6, 'Lost': 0, 'Not lost for AM': 2, 
+                   'Wonderful': 8, 'Revised': 5, 'Offered': 4, 'Offerable': 3}
 
     item_type_values = ['W', 'WI', 'S', 'PL', 'IPL', 'SLAWR', 'Others']
-    item_type_dict = {'W':5.0, 'WI':6.0, 'S':3.0, 'Others':1.0, 'PL':2.0, 'IPL':0.0, 'SLAWR':4.0}
+    item_type_dict = {'W': 5, 'WI': 6, 'S': 3, 'Others': 1, 'PL': 2, 'IPL': 0, 'SLAWR': 4}
 
     application_values = [2.0, 3.0, 4.0, 5.0, 10.0, 15.0, 19.0, 20.0, 22.0, 25.0, 26.0, 
                         27.0, 28.0, 29.0, 38.0, 39.0, 40.0, 41.0, 42.0, 56.0, 58.0, 
@@ -113,13 +113,13 @@ class prediction:
                 item_date = st.date_input(label='Item Date', min_value=date(2020,7,1), 
                                         max_value=date(2021,5,31), value=date(2020,7,1))
                 
-                quantity_log = st.text_input(label='Quantity Tons (Min: 0.00001 & Max: 1000000000)')
+                quantity = st.text_input(label='Quantity Tons (Min: 0.00001 & Max: 1000000000)')
 
                 country = st.selectbox(label='Country', options=options.country_values)
 
                 item_type = st.selectbox(label='Item Type', options=options.item_type_values)
 
-                thickness_log = st.number_input(label='Thickness', min_value=0.1, max_value=2500000.0, value=1.0)
+                thickness = st.number_input(label='Thickness', min_value=0.1, max_value=2500000.0, value=1.0)
 
                 product_ref = st.selectbox(label='Product Ref', options=options.product_ref_values)
 
@@ -154,29 +154,21 @@ class prediction:
             
             # load the regression pickle model
             with open(r'C:\\GD\\Notes\\DS Class\\DTM15\\Project\\Guvi project\\5 Industrial Copper Modeling\\selling_price_model.pkl', 'rb') as f:
-                model = pickle.load(f)
+                selling_price_model = pickle.load(f)
             
             # make array for all user input values in required order for model prediction
-            user_data = np.array([[customer, 
-                                country, 
-                                options.status_dict[status], 
-                                options.item_type_dict[item_type], 
-                                application, 
-                                width, 
-                                product_ref, 
-                                np.log(float(quantity_log)), 
-                                np.log(float(thickness_log)),
-                                item_date.day, item_date.month, item_date.year,
-                                delivery_date.day, delivery_date.month, delivery_date.year]])
+            deliveryDate = date(delivery_date.year, delivery_date.month, delivery_date.day)         
+            itemDate = date(item_date.year, item_date.month, item_date.day)
+            duration_days = (deliveryDate - itemDate).days
+
+            user_data = np.array([[quantity, customer, country, options.status_dict[status], options.item_type_dict[item_type],
+                                   application, thickness, width, product_ref, duration_days]])
             
             # model predict the selling price based on user input
-            y_pred = model.predict(user_data)[0]
+            y_pred = selling_price_model.predict(user_data)
 
-            # inverse transformation for log transformation data
-            #selling_price = np.exp(y_pred[0])
-
-            # round the value with 2 decimal point (Eg: 1.35678 to 1.36)
-            selling_price = round(selling_price, 2)
+             # round the value with 2 decimal point (Eg: 1.35678 to 1.36)
+            selling_price = round(y_pred[0], 2)
 
             return selling_price
 
@@ -193,13 +185,13 @@ class prediction:
                 item_date = st.date_input(label='Item Date', min_value=date(2020,7,1), 
                                         max_value=date(2021,5,31), value=date(2020,7,1))
                 
-                quantity_log = st.text_input(label='Quantity Tons (Min: 0.00001 & Max: 1000000000)')
+                quantity = st.text_input(label='Quantity Tons (Min: 0.00001 & Max: 1000000000)')
 
                 country = st.selectbox(label='Country', options=options.country_values)
 
                 item_type = st.selectbox(label='Item Type', options=options.item_type_values)
 
-                thickness_log = st.number_input(label='Thickness', min_value=0.1, max_value=2500000.0, value=1.0)
+                thickness = st.number_input(label='Thickness', min_value=0.1, max_value=2500000.0, value=1.0)
 
                 product_ref = st.selectbox(label='Product Ref', options=options.product_ref_values)
 
@@ -211,7 +203,7 @@ class prediction:
                 
                 customer = st.text_input(label='Customer ID (Min: 12458000 & Max: 2147484000)')
 
-                selling_price_log = st.text_input(label='Selling Price (Min: 0.1 & Max: 100001000)')
+                selling_price = st.text_input(label='Selling Price (Min: 0.1 & Max: 100001000)')
 
                 application = st.selectbox(label='Application', options=options.application_values)
 
@@ -233,24 +225,17 @@ class prediction:
         if button:
             
             # load the classification pickle model
-            with open(r'models\classification_model.pkl', 'rb') as f:
-                model = pickle.load(f)
+            with open(r'C:\\GD\\Notes\\DS Class\\DTM15\\Project\\Guvi project\\5 Industrial Copper Modeling\\status_model.pkl', 'rb') as f:
+                status_model = pickle.load(f)
             
             # make array for all user input values in required order for model prediction
-            user_data = np.array([[customer, 
-                                country, 
-                                options.item_type_dict[item_type], 
-                                application, 
-                                width, 
-                                product_ref, 
-                                np.log(float(quantity_log)), 
-                                np.log(float(thickness_log)),
-                                np.log(float(selling_price_log)),
-                                item_date.day, item_date.month, item_date.year,
-                                delivery_date.day, delivery_date.month, delivery_date.year]])
+            duration_days = (delivery_date - item_date).days
+
+            user_data = np.array([[quantity, customer, country, options.item_type_dict[item_type], application,
+                                   thickness, width, product_ref, selling_price, duration_days]])
             
             # model predict the status based on user input
-            y_pred = model.predict(user_data)
+            y_pred = status_model.predict(user_data)
 
             # we get the single output in list, so we access the output using index method
             status = y_pred[0]
