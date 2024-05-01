@@ -37,12 +37,13 @@ git clone https://github.com/yourusername/industrial-copper-modeling.git
 
 
 2. Navigate to the project directory:
-bash
+
 cd industrial-copper-modeling
 
 3. Install the required dependencies:
-bash
+
 pip install -r requirements.txt
+bash```
 
 ## Usage
 
