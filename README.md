@@ -61,9 +61,3 @@ This will launch the application in your default web browser, where you can inte
 ## Contributing
 
 Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or create a pull request. Here's how you can contribute:
-
-- Fork the repository.
-- Create your feature branch (git checkout -b feature/YourFeatureName).
-- Commit your changes (git commit -am 'Add some feature').
-- Push to the branch (git push origin feature/YourFeatureName).
-- Create a new Pull Request.
