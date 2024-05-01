@@ -40,13 +40,13 @@ To run the Industrial Copper Modeling application locally, follow these steps:
 
 ```bash
 cd industrial-copper-modeling
-'''
+```
 
 3. Install the required dependencies:
 
 ```bash
 pip install -r requirements.txt
-'''
+```
 
 ## Usage
 
@@ -54,7 +54,7 @@ Once installed, you can run the Streamlit application using the following comman
 
 ```bash
 streamlit run IndustrialCopperModeling.py
-'''
+```
 
 This will launch the application in your default web browser, where you can interact with the predictive models.
 
