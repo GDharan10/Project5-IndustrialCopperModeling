@@ -32,9 +32,7 @@ To run the Industrial Copper Modeling application locally, follow these steps:
 
 1. Clone the repository:
 
-  ```bash
-  git clone https://github.com/yourusername/industrial-copper-modeling.git
-
+git clone https://github.com/yourusername/industrial-copper-modeling.git
 
 2. Navigate to the project directory:
 
@@ -43,7 +41,7 @@ cd industrial-copper-modeling
 3. Install the required dependencies:
 
 pip install -r requirements.txt
-bash```
+
 
 ## Usage
 
