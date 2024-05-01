@@ -35,3 +35,30 @@ To run the Industrial Copper Modeling application locally, follow these steps:
 
 ```bash
 git clone https://github.com/yourusername/industrial-copper-modeling.git
+
+
+2. Navigate to the project directory:
+
+cd industrial-copper-modeling
+
+3. Install the required dependencies:
+
+pip install -r requirements.txt
+
+## Usage
+
+Once installed, you can run the Streamlit application using the following command:
+
+streamlit run IndustrialCopperModeling.py
+
+This will launch the application in your default web browser, where you can interact with the predictive models.
+
+## Contributing
+
+Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or create a pull request. Here's how you can contribute:
+
+Fork the repository.
+Create your feature branch (git checkout -b feature/YourFeatureName).
+Commit your changes (git commit -am 'Add some feature').
+Push to the branch (git push origin feature/YourFeatureName).
+Create a new Pull Request.
